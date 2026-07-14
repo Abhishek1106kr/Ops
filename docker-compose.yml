@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  # 🐍 Python FastAPI Central Event Bus & Agents
+  api:
+    build:
+      context: ./apps/api
+      dockerfile: Dockerfile
+    image: atomops-api:latest
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - SLACK_BOT_TOKEN=${SLACK_BOT_TOKEN}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - GROQ_API_KEY=${GROQ_API_KEY}
+    env_file:
+      - .env
+    restart: always
+
+  # 📡 TypeScript Node/Express Webhook Listener & Polling Scanner
+  backend:
+    build:
+      context: .
+      dockerfile: ./backend/Dockerfile
+    image: atomops-ts-backend:latest
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+      - GITHUB_TOKEN=${GITHUB_TOKEN}
+      - GITHUB_OWNER=${GITHUB_OWNER}
+      - GITHUB_REPO=${GITHUB_REPO}
+      - GITHUB_WEBHOOK_SECRET=${GITHUB_WEBHOOK_SECRET}
+      - SENTINEL_API_URL=http://api:8000
+    depends_on:
+      - api
+    env_file:
+      - .env
+    restart: always
+
+  # 💻 Next.js Observability Dashboard Frontend Console
+  web:
+    build:
+      context: .
+      dockerfile: ./apps/web/Dockerfile
+    image: atomops-frontend:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+    depends_on:
+      - api
+    restart: always
