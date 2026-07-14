@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   Settings, Key, Database, MessageSquare, Send, 
-  HelpCircle, CheckCircle, RefreshCw, AlertTriangle, Play 
+  HelpCircle, CheckCircle, RefreshCw, AlertTriangle
 } from "lucide-react";
 
 interface SettingsState {
@@ -153,7 +153,7 @@ export default function SettingsPage() {
           <h2 className="text-2xl font-bold tracking-tight text-slate-100 font-sans">Ops Control Settings</h2>
         </div>
         <p className="text-sm text-slate-400">
-          Configure runtime environment variables, link Vector DB providers, and chat with the Operations assistant.
+          Configure Slack integration keys and Jira tickets settings to trigger AI Agent pipelines.
         </p>
       </header>
 
@@ -169,85 +169,22 @@ export default function SettingsPage() {
           <div className="xl:col-span-7 space-y-8">
             <form onSubmit={handleSave} className="glass-card p-6 rounded-2xl border border-darkBorder/40 space-y-6">
               
-              {/* Credentials Section */}
+              {/* Slack app configuration */}
               <div className="space-y-4">
                 <div className="flex items-center gap-2 pb-2 border-b border-darkBorder/30">
                   <Key className="w-4 h-4 text-brandCyan" />
-                  <h3 className="text-sm font-bold text-slate-100 uppercase tracking-wider">Credential Keys</h3>
+                  <h3 className="text-sm font-bold text-slate-100 uppercase tracking-wider">Slack Configuration</h3>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-1.5">
-                    <label className="text-[11px] text-slate-400 uppercase font-bold">Groq API Key (Auto-hardcoded)</label>
-                    <input
-                      type="password"
-                      placeholder="gsk_xxxxxxxxxxxxxxxxxxxx (Hardcoded default active)"
-                      value={settings.GROQ_API_KEY}
-                      onChange={(e) => setSettings({ ...settings, GROQ_API_KEY: e.target.value })}
-                      className="w-full bg-slate-950/80 border border-darkBorder/60 rounded-xl px-3.5 py-2 text-xs text-slate-200 focus:outline-none focus:border-brandPurple transition-colors"
-                    />
-                  </div>
-                  <div className="space-y-1.5">
-                    <label className="text-[11px] text-slate-400 uppercase font-bold">Slack App Bot Token</label>
-                    <input
-                      type="password"
-                      placeholder="xoxb-xxxxxxxxxxxx"
-                      value={settings.SLACK_BOT_TOKEN}
-                      onChange={(e) => setSettings({ ...settings, SLACK_BOT_TOKEN: e.target.value })}
-                      className="w-full bg-slate-950/80 border border-darkBorder/60 rounded-xl px-3.5 py-2 text-xs text-slate-200 focus:outline-none focus:border-brandPurple transition-colors"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* GitHub VCS Section */}
-              <div className="space-y-4">
-                <div className="flex items-center gap-2 pb-2 border-b border-darkBorder/30">
-                  <Database className="w-4 h-4 text-indigo-400" />
-                  <h3 className="text-sm font-bold text-slate-100 uppercase tracking-wider">GitHub VCS Mappings</h3>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-1.5">
-                    <label className="text-[11px] text-slate-400 uppercase font-bold">GitHub Token</label>
-                    <input
-                      type="password"
-                      placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"
-                      value={settings.GITHUB_TOKEN}
-                      onChange={(e) => setSettings({ ...settings, GITHUB_TOKEN: e.target.value })}
-                      className="w-full bg-slate-950/80 border border-darkBorder/60 rounded-xl px-3.5 py-2 text-xs text-slate-200 focus:outline-none focus:border-brandPurple transition-colors"
-                    />
-                  </div>
-                  <div className="space-y-1.5">
-                    <label className="text-[11px] text-slate-400 uppercase font-bold">Webhook secret</label>
-                    <input
-                      type="password"
-                      placeholder="Signing secret key"
-                      value={settings.GITHUB_WEBHOOK_SECRET}
-                      onChange={(e) => setSettings({ ...settings, GITHUB_WEBHOOK_SECRET: e.target.value })}
-                      className="w-full bg-slate-950/80 border border-darkBorder/60 rounded-xl px-3.5 py-2 text-xs text-slate-200 focus:outline-none focus:border-brandPurple transition-colors"
-                    />
-                  </div>
-                  <div className="space-y-1.5">
-                    <label className="text-[11px] text-slate-400 uppercase font-bold">Repository Owner</label>
-                    <input
-                      type="text"
-                      placeholder="Abhishek1106kr"
-                      value={settings.GITHUB_OWNER}
-                      onChange={(e) => setSettings({ ...settings, GITHUB_OWNER: e.target.value })}
-                      className="w-full bg-slate-950/80 border border-darkBorder/60 rounded-xl px-3.5 py-2 text-xs text-slate-200 focus:outline-none focus:border-brandPurple transition-colors"
-                    />
-                  </div>
-                  <div className="space-y-1.5">
-                    <label className="text-[11px] text-slate-400 uppercase font-bold">Repository Name</label>
-                    <input
-                      type="text"
-                      placeholder="Client-fluxora"
-                      value={settings.GITHUB_REPO}
-                      onChange={(e) => setSettings({ ...settings, GITHUB_REPO: e.target.value })}
-                      className="w-full bg-slate-950/80 border border-darkBorder/60 rounded-xl px-3.5 py-2 text-xs text-slate-200 focus:outline-none focus:border-brandPurple transition-colors"
-                    />
-                  </div>
+                <div className="space-y-1.5">
+                  <label className="text-[11px] text-slate-400 uppercase font-bold">Slack App Bot Token</label>
+                  <input
+                    type="password"
+                    placeholder="xoxb-xxxxxxxxxxxx"
+                    value={settings.SLACK_BOT_TOKEN}
+                    onChange={(e) => setSettings({ ...settings, SLACK_BOT_TOKEN: e.target.value })}
+                    className="w-full bg-slate-950/80 border border-darkBorder/60 rounded-xl px-3.5 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-brandPurple transition-colors"
+                  />
                 </div>
               </div>
 
@@ -290,62 +227,6 @@ export default function SettingsPage() {
                     />
                   </div>
                 </div>
-              </div>
-
-              {/* Vector Database Section */}
-              <div className="space-y-4">
-                <div className="flex items-center gap-2 pb-2 border-b border-darkBorder/30">
-                  <Database className="w-4 h-4 text-emerald-400" />
-                  <h3 className="text-sm font-bold text-slate-100 uppercase tracking-wider">Vector DB Config</h3>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="space-y-1.5">
-                    <label className="text-[11px] text-slate-400 uppercase font-bold">Engine Type</label>
-                    <select
-                      value={settings.VECTOR_DB_TYPE}
-                      onChange={(e) => setSettings({ ...settings, VECTOR_DB_TYPE: e.target.value })}
-                      className="w-full bg-slate-950/80 border border-darkBorder/60 rounded-xl px-3.5 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-brandPurple transition-colors"
-                    >
-                      <option value="chromadb">ChromaDB (Local)</option>
-                      <option value="pgvector">PGVector (Postgres)</option>
-                      <option value="pinecone">Pinecone Cloud</option>
-                      <option value="qdrant">Qdrant Engine</option>
-                    </select>
-                  </div>
-                  <div className="space-y-1.5 md:col-span-2">
-                    <label className="text-[11px] text-slate-400 uppercase font-bold">Connection Endpoint URL</label>
-                    <input
-                      type="text"
-                      placeholder="http://localhost:8000"
-                      value={settings.VECTOR_DB_URL}
-                      onChange={(e) => setSettings({ ...settings, VECTOR_DB_URL: e.target.value })}
-                      className="w-full bg-slate-950/80 border border-darkBorder/60 rounded-xl px-3.5 py-2 text-xs text-slate-200 focus:outline-none focus:border-brandPurple transition-colors"
-                    />
-                  </div>
-                  <div className="space-y-1.5 md:col-span-3">
-                    <label className="text-[11px] text-slate-400 uppercase font-bold">Vector Database Auth API Key</label>
-                    <input
-                      type="password"
-                      placeholder="Enter connection authorization key if applicable"
-                      value={settings.VECTOR_DB_API_KEY}
-                      onChange={(e) => setSettings({ ...settings, VECTOR_DB_API_KEY: e.target.value })}
-                      className="w-full bg-slate-950/80 border border-darkBorder/60 rounded-xl px-3.5 py-2 text-xs text-slate-200 focus:outline-none focus:border-brandPurple transition-colors"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* State DB Setup */}
-              <div className="space-y-1.5">
-                <label className="text-[11px] text-slate-400 uppercase font-bold">PostgreSQL Database Connection URL</label>
-                <input
-                  type="text"
-                  placeholder="postgresql://user:pass@host:5432/dbname"
-                  value={settings.DATABASE_URL}
-                  onChange={(e) => setSettings({ ...settings, DATABASE_URL: e.target.value })}
-                  className="w-full bg-slate-950/80 border border-darkBorder/60 rounded-xl px-3.5 py-2 text-xs text-slate-200 focus:outline-none focus:border-brandPurple transition-colors"
-                />
               </div>
 
               {/* Action Buttons */}
@@ -410,7 +291,7 @@ export default function SettingsPage() {
           </div>
 
           {/* RIGHT: Operations Chat Console (5 Cols) */}
-          <div className="xl:col-span-5 flex flex-col glass-card border border-darkBorder/40 rounded-2xl overflow-hidden h-[780px]">
+          <div className="xl:col-span-5 flex flex-col glass-card border border-darkBorder/40 rounded-2xl overflow-hidden h-[700px]">
             <div className="p-4 border-b border-darkBorder/40 bg-slate-950/20 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <MessageSquare className="w-4 h-4 text-brandPurple" />

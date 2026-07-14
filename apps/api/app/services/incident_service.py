@@ -113,6 +113,38 @@ class IncidentService:
                 "slackChannel": "#alerts-auth",
                 "githubPrNumber": 412,
                 "githubPrUrl": "https://github.com/sentinel-ai/repo/pull/412"
+            },
+            {
+                "id": "INC-105",
+                "title": "Heap Memory Leak Outage",
+                "severity": "P1",
+                "status": "Investigating",
+                "service": "Payment API",
+                "triggeredAt": (now - datetime.timedelta(minutes=45)).isoformat() + "Z",
+                "updatedAt": (now - datetime.timedelta(minutes=40)).isoformat() + "Z",
+                "summary": "OOM Killer terminated the payment-service processes on container pods.",
+                "description": "Payment process experienced a steady memory growth curve, causing memory saturation at 94% and subsequent kernel panic OOM kills.",
+                "rootCause": "Unreleased pub/sub closure event listeners",
+                "filePath": "apps/payment/src/listener.ts",
+                "slackChannel": "#alerts-payment-p1",
+                "githubPrNumber": 441,
+                "githubPrUrl": "https://github.com/sentinel-ai/repo/pull/441"
+            },
+            {
+                "id": "INC-106",
+                "title": "SMS Gateway Integration Failure",
+                "severity": "P3",
+                "status": "Resolved",
+                "service": "Notification Service",
+                "triggeredAt": (now - datetime.timedelta(hours=6)).isoformat() + "Z",
+                "updatedAt": (now - datetime.timedelta(hours=5)).isoformat() + "Z",
+                "summary": "Carrier REST delivery gateway timeout causing dispatch timeouts.",
+                "description": "Twilio SMS REST requests returned 504 gateway failures. Switched delivery route configurations to messagebird fallback systems.",
+                "rootCause": "Regional provider network outage",
+                "filePath": "config/gateways.yaml",
+                "slackChannel": "#alerts-notifications",
+                "githubPrNumber": 420,
+                "githubPrUrl": "https://github.com/sentinel-ai/repo/pull/420"
             }
         ]
 

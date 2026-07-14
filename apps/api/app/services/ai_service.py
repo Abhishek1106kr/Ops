@@ -47,6 +47,52 @@ class AIService:
 -client.set(key, val);
 +client.set(key, val, { EX: 900 }); // 15 mins TTL"""
                 }
+            },
+            "INC-105": {
+                "incidentId": "INC-105",
+                "confidenceScore": 91.0,
+                "reasoningSteps": [
+                    "Observe container restart logs: Out-of-memory (OOM) killer terminated process 'payment-service' on pod-2.",
+                    "Track heap memory allocations: Steady leak detected in transaction confirmation callback closure handler.",
+                    "Identify leak source: Unreleased event subscription listeners holding references to request payloads."
+                ],
+                "possibleTriggers": [
+                    "Recent merge of transaction event pub/sub optimization filters.",
+                    "Higher concurrent load causing callback listener accumulation."
+                ],
+                "suggestedFix": {
+                    "description": "Ensure payment callback event listeners are correctly unsubscribed/released.",
+                    "filePath": "apps/payment/src/listener.ts",
+                    "codeChange": """diff
+-paymentEvents.on('confirm', this.handleConfirm);
++paymentEvents.on('confirm', this.handleConfirm);
++// Clean up listeners on request completion/destruction
++requestContext.onCleanup(() => {
++  paymentEvents.off('confirm', this.handleConfirm);
++});"""
+                }
+            },
+            "INC-106": {
+                "incidentId": "INC-106",
+                "confidenceScore": 88.0,
+                "reasoningSteps": [
+                    "Trace delivery pipeline: Notification API latency exceeded 6.5s.",
+                    "Detect primary endpoint timeouts: Twilio REST endpoint is returning gateway timeout failures.",
+                    "Identify carrier issues: Core routing outage on regional telecom providers."
+                ],
+                "possibleTriggers": [
+                    "Regional gateway carrier downtime.",
+                    "Exceeded account rate-limiting quotas on SMS APIs."
+                ],
+                "suggestedFix": {
+                    "description": "Configure automatic retry fallback route pointing to secondary SMS providers.",
+                    "filePath": "config/gateways.yaml",
+                    "codeChange": """diff
+-primary_sms_provider: twilio
++primary_sms_provider: twilio
++fallback_sms_provider: messagebird
++enable_auto_failover: true"""
+                }
             }
         }
 
@@ -77,4 +123,5 @@ class AIService:
             }
         }
 
+# Singleton instance
 ai_service = AIService()
