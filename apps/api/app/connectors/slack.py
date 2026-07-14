@@ -1,11 +1,12 @@
 import logging
+from slack_sdk import WebClient
 
 logger = logging.getLogger(__name__)
 
 class SlackConnector:
     def __init__(self, token: str):
         try:
-            from slack_sdk import WebClient
+            
             self.client = WebClient(token=token)
         except ImportError:
             self.client = None

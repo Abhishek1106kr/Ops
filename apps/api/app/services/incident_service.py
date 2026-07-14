@@ -48,7 +48,8 @@ class IncidentService:
         }
         
         # Detect production PostgreSQL or SQLite config from environment
-        self.db_url = os.getenv("DATABASE_URL")
+        from app.services.settings_service import settings_service
+        self.db_url = settings_service.get("DATABASE_URL")
         self.engine = None
         self.SessionLocal = None
         

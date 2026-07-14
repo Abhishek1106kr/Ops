@@ -47,8 +47,8 @@ class CommunicationAgent(BaseAgent):
             "labels": ["sentinel-ai", "auto-generated", service.lower().replace(" ", "-")],
         }
 
-        import os
-        token = os.getenv("SLACK_BOT_TOKEN", "")
+        from app.services.settings_service import settings_service
+        token = settings_service.get("SLACK_BOT_TOKEN")
         connector = SlackConnector(token=token)
         channel = f"#alerts-{service.lower().replace(' ', '-')}"
         connector.post_incident_alert(channel=channel, message_text=slack_message)

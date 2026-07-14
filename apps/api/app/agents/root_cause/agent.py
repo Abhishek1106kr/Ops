@@ -1,6 +1,7 @@
 import asyncio
 import datetime
 import logging
+import json
 from typing import Dict
 from app.agents.base_agent import BaseAgent
 from app.events.bus import Event
@@ -47,9 +48,8 @@ class RootCauseAgent(BaseAgent):
     async def _correlate(self, incident_id: str, github_data: dict, logs_data: dict):
         logger.info(f"[{self.NAME}] Correlating metrics and VCS state for {incident_id}")
         
-        import os
-        import json
-        api_key = os.getenv("GROQ_API_KEY") or ""
+        from app.services.settings_service import settings_service
+        api_key = settings_service.get("GROQ_API_KEY")
 
         if api_key:
             try:

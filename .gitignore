@@ -27,3 +27,7 @@ pip-delete-this-directory.txt
 htmlcov/
 .mypy_cache/
 .ipynb_checkpoints/
+
+# Custom Settings Files
+config.json
+**/config.json

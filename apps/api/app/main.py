@@ -5,7 +5,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api import incidents, metrics, ai, github
+from app.api import incidents, metrics, ai, github, settings, chat
 from app.api import events as events_router
 from app.api import agents as agents_router
 
@@ -84,6 +84,8 @@ app.include_router(ai.router,            prefix="/api/ai",        tags=["ai"])
 app.include_router(github.router,        prefix="/api/github",    tags=["github"])
 app.include_router(events_router.router, prefix="/api/events",    tags=["events"])
 app.include_router(agents_router.router, prefix="/api/agents",    tags=["agents"])
+app.include_router(settings.router,      prefix="/api/settings",  tags=["settings"])
+app.include_router(chat.router,          prefix="/api/chat",      tags=["chat"])
 
 
 @app.get("/api/health")
