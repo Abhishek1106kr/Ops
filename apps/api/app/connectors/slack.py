@@ -5,16 +5,21 @@ logger = logging.getLogger(__name__)
 
 class SlackConnector:
     def __init__(self, token: str):
-        try:
-            
-            self.client = WebClient(token=token)
-        except ImportError:
+        # Prevent blocking if token is missing, empty, or a mock placeholder
+        if not token or token.strip() == "" or "xoxb-your-slack-bot-token" in token or "MOCK" in token:
             self.client = None
-            logger.warning("slack_sdk not found in Python environment. Slack API integrations will run in simulation mode.")
+            logger.info("Slack bot token is not configured or is a placeholder. Slack API is running in simulation mode.")
+        else:
+            try:
+                self.client = WebClient(token=token)
+            except Exception as e:
+                self.client = None
+                logger.warning(f"Failed to initialize Slack client client: {e}. Slack API will run in simulation mode.")
 
     def post_incident_alert(self, channel: str, message_text: str, blocks: list = None) -> bool:
         """
         Posts a ChatOps notification alert to a specific Slack channel.
+        Runs in simulation mode without making network calls if token is not configured.
         """
         if self.client:
             try:
@@ -29,5 +34,5 @@ class SlackConnector:
                 logger.error(f"Failed to post Slack alert to {channel}: {e}")
                 return False
         else:
-            logger.info(f"[Simulation] Slack alert to {channel}: {message_text}")
+            logger.info(f"[Simulation Mode] Slack alert to {channel}: {message_text}")
             return True
