@@ -16,25 +16,19 @@ class VectorDBClient:
         Establishes connection with the Vector DB and provisions the target collection.
         Uses real chromadb client if installed, otherwise falls back to the simulator context.
         """
-        logger.info(f"[VectorDB] Initiating connection to {self.db_type} at {self.url}...")
+        logger.info(f"[VectorDB] Initiating connection to local persistent {self.db_type}...")
         try:
             import chromadb
-            # Try connecting to a remote ChromaDB server via HTTP
-            # e.g., url = "http://localhost:8000"
-            host = self.url.replace("http://", "").replace("https://", "").split(":")[0]
-            port = 8000
-            if ":" in self.url.replace("http://", "").replace("https://", ""):
-                port = int(self.url.split(":")[-1].replace("/", ""))
-                
-            self.client = chromadb.HttpClient(host=host, port=port)
+            # Initialize persistent client to write database directly to local filesystem
+            self.client = chromadb.PersistentClient(path="./chroma_db")
             self.collection = self.client.get_or_create_collection(name=collection_name)
-            logger.info(f"✅ [VectorDB] Connected successfully. Collection '{collection_name}' is provisioned.")
+            logger.info(f"✅ [VectorDB] Persistent client initialized. Collection '{collection_name}' is ready.")
             return True
         except ImportError:
             logger.info("ℹ️ [VectorDB] 'chromadb' python package not found. Initiating simulator fallback mode.")
             return False
         except Exception as e:
-            logger.warning(f"⚠️ [VectorDB] Failed to connect to remote server: {e}. Initiating simulator fallback mode.")
+            logger.warning(f"⚠️ [VectorDB] Failed to initialize persistent client: {e}. Initiating simulator fallback mode.")
             return False
 
     def ingest_document(self, doc_id: str, text: str, metadata: Dict[str, Any]):
