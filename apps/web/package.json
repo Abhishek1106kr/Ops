@@ -9,9 +9,10 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@sentinel-ai/mock": "workspace:*",
     "@sentinel-ai/types": "workspace:*",
     "@sentinel-ai/utils": "workspace:*",
-    "@sentinel-ai/mock": "workspace:*",
+    "@supabase/supabase-js": "^2.110.5",
     "@tanstack/react-query": "^5.62.0",
     "clsx": "^2.1.1",
     "framer-motion": "^11.11.17",
