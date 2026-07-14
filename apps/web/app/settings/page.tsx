@@ -15,6 +15,9 @@ interface SettingsState {
   GROQ_API_KEY: string;
   DATABASE_URL: string;
   SLACK_BOT_TOKEN: string;
+  JIRA_URL: string;
+  JIRA_EMAIL: string;
+  JIRA_API_TOKEN: string;
   VECTOR_DB_TYPE: string;
   VECTOR_DB_URL: string;
   VECTOR_DB_API_KEY: string;
@@ -37,6 +40,9 @@ export default function SettingsPage() {
     GROQ_API_KEY: "",
     DATABASE_URL: "",
     SLACK_BOT_TOKEN: "",
+    JIRA_URL: "",
+    JIRA_EMAIL: "",
+    JIRA_API_TOKEN: "",
     VECTOR_DB_TYPE: "chromadb",
     VECTOR_DB_URL: "",
     VECTOR_DB_API_KEY: "",
@@ -67,7 +73,7 @@ export default function SettingsPage() {
       const res = await fetch(`${API_BASE}/api/settings/`);
       if (res.ok) {
         const data = await res.json();
-        setSettings(data);
+        setSettings((prev) => ({ ...prev, ...data }));
       }
     } catch (e) {
       console.error("Failed to fetch settings config:", e);
@@ -172,10 +178,10 @@ export default function SettingsPage() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-1.5">
-                    <label className="text-[11px] text-slate-400 uppercase font-bold">Groq API Key</label>
+                    <label className="text-[11px] text-slate-400 uppercase font-bold">Groq API Key (Auto-hardcoded)</label>
                     <input
                       type="password"
-                      placeholder="gsk_xxxxxxxxxxxxxxxxxxxx"
+                      placeholder="gsk_xxxxxxxxxxxxxxxxxxxx (Hardcoded default active)"
                       value={settings.GROQ_API_KEY}
                       onChange={(e) => setSettings({ ...settings, GROQ_API_KEY: e.target.value })}
                       className="w-full bg-slate-950/80 border border-darkBorder/60 rounded-xl px-3.5 py-2 text-xs text-slate-200 focus:outline-none focus:border-brandPurple transition-colors"
@@ -240,6 +246,47 @@ export default function SettingsPage() {
                       value={settings.GITHUB_REPO}
                       onChange={(e) => setSettings({ ...settings, GITHUB_REPO: e.target.value })}
                       className="w-full bg-slate-950/80 border border-darkBorder/60 rounded-xl px-3.5 py-2 text-xs text-slate-200 focus:outline-none focus:border-brandPurple transition-colors"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Jira Integration Section */}
+              <div className="space-y-4">
+                <div className="flex items-center gap-2 pb-2 border-b border-darkBorder/30">
+                  <Database className="w-4 h-4 text-blue-400" />
+                  <h3 className="text-sm font-bold text-slate-100 uppercase tracking-wider">Jira Cloud Settings</h3>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="space-y-1.5">
+                    <label className="text-[11px] text-slate-400 uppercase font-bold">Jira Instance URL</label>
+                    <input
+                      type="text"
+                      placeholder="https://company.atlassian.net"
+                      value={settings.JIRA_URL}
+                      onChange={(e) => setSettings({ ...settings, JIRA_URL: e.target.value })}
+                      className="w-full bg-slate-950/80 border border-darkBorder/60 rounded-xl px-3.5 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-brandPurple transition-colors"
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="text-[11px] text-slate-400 uppercase font-bold">User email</label>
+                    <input
+                      type="email"
+                      placeholder="developer@org.com"
+                      value={settings.JIRA_EMAIL}
+                      onChange={(e) => setSettings({ ...settings, JIRA_EMAIL: e.target.value })}
+                      className="w-full bg-slate-950/80 border border-darkBorder/60 rounded-xl px-3.5 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-brandPurple transition-colors"
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="text-[11px] text-slate-400 uppercase font-bold">API Token</label>
+                    <input
+                      type="password"
+                      placeholder="Jira API key"
+                      value={settings.JIRA_API_TOKEN}
+                      onChange={(e) => setSettings({ ...settings, JIRA_API_TOKEN: e.target.value })}
+                      className="w-full bg-slate-950/80 border border-darkBorder/60 rounded-xl px-3.5 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-brandPurple transition-colors"
                     />
                   </div>
                 </div>
@@ -363,7 +410,7 @@ export default function SettingsPage() {
           </div>
 
           {/* RIGHT: Operations Chat Console (5 Cols) */}
-          <div className="xl:col-span-5 flex flex-col glass-card border border-darkBorder/40 rounded-2xl overflow-hidden h-[680px]">
+          <div className="xl:col-span-5 flex flex-col glass-card border border-darkBorder/40 rounded-2xl overflow-hidden h-[780px]">
             <div className="p-4 border-b border-darkBorder/40 bg-slate-950/20 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <MessageSquare className="w-4 h-4 text-brandPurple" />
