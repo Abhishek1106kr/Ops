@@ -31,3 +31,7 @@ htmlcov/
 # Custom Settings Files
 config.json
 **/config.json
+
+# Local Databases
+chroma_db/
+**/chroma_db/
