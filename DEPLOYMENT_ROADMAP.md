@@ -28,7 +28,7 @@ Supabase handles user sessions, logins, signups, and access token validation:
    Configure these parameters in your Vercel frontend environment console:
    ```env
    NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI...
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=
    ```
 
 3. **Configure Authentication Settings**:
